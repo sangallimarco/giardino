@@ -1,14 +1,16 @@
 const EventEmitter = require('events');
 
 class Queue extends EventEmitter {
-    constructor(pins, gpio) {
+    constructor() {
         super();
         this.queue = [];
+    }
 
+    init(pins, delayOn = 2000, delayOff = 3000) {
         pins.forEach(x => {
             this.queue.push(
-                this.createItem(x, true, 10000),
-                this.createItem(x, false, 2000)
+                this.createItem(x, true, delayOn),
+                this.createItem(x, false, delayOff)
             );
         });
     }
@@ -23,7 +25,7 @@ class Queue extends EventEmitter {
 
     run() {
         if (this.queue.length) {
-            let item = this.queue.pop();
+            let item = this.queue.shift();
 
             if (item) {
                 let {
@@ -36,6 +38,8 @@ class Queue extends EventEmitter {
                     this.run()
                 }, delay);
             }
+        } else {
+            this.emit('end');
         }
     }
 
