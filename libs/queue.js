@@ -35,7 +35,7 @@ class Queue extends EventEmitter {
                 } = item;
                 this.emit('change', pin, status);
                 setTimeout(() => {
-                    this.run()
+                    this.run();
                 }, delay);
             }
         } else {

@@ -11,9 +11,9 @@ class GPIO {
         return Promise.all(setups);
     }
 
-    setUpPin(pin, mode) {
+    setUpPin(pin, mode = DIR_OUT) {
         return new Promise((resolve, reject) => {
-            gpio.setup(pin, DIR_OUT, (err) => {
+            gpio.setup(pin, mode, (err) => {
                 if (err) {
                     reject(err);
                 } else {
