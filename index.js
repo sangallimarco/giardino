@@ -8,6 +8,7 @@ const delayOff = 1000;
 const q = new queue();
 q.on('change', (pin, state) => {
         console.log(pin, state);
+        gpio.setPin(pin, state);
 });
 q.on('end', () => {
         console.log('Ended');
@@ -24,7 +25,6 @@ function start() {
         q.init(pins, delayOn, delayOff);
         q.run();
 };
-
 
 // first run
 gpio.init(pins)
