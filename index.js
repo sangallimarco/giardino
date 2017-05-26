@@ -23,11 +23,11 @@ q.on('end', () => {
 
 // restart
 function start() {
-        console.log('Initialise Queue...');
+        console.log('Initialising Queue...');
         q.init(pins, delayOn, delayOff);
-        console.log('Run Queue...');
+        console.log('Running Queue...');
         q.run();
-};
+}
 
 // first run
 gpio.init(pins)
