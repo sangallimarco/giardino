@@ -4,6 +4,8 @@
   "description": "watering system",
   "main": "index.js",
   "dependencies": {
+    "config": "^1.26.1",
+    "forecast": "^0.3.2",
     "rpi-gpio": "^0.8.1"
   },
   "devDependencies": {},
