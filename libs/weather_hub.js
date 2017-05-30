@@ -14,7 +14,7 @@ const forecastLatLon = config.get('FORECAST.LATLON');
 const forecast = new Forecast({
     service: 'darksky',
     key: forecastKey,
-    units: 'celcius',
+    units: 'celsius',
     cache: true, // Cache API requests 
     ttl: {
         minutes: 27,
