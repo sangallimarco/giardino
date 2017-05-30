@@ -36,7 +36,6 @@ class WeatherHub {
         q.on('end', () => {
             console.log('Ended');
             this.lock = false;
-            this.run();
         });
 
         // destroy queue later
