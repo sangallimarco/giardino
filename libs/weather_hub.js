@@ -87,6 +87,7 @@ class WeatherHub {
         gpio.init(pins)
             .then(
                 () => {
+                    console.log('System configured');
                     this.lock = false;
                 }
             );
