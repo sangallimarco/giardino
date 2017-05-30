@@ -1,11 +1,10 @@
 const config = require('config');
 const queue = require('./queue');
+
 const develop = process.env.NODE_ENV === 'development';
 
 const gpio = develop ? require('./gpio_mock') : require('./gpio');
-
 const pins = config.get('CORE.PINS');
-const when = config.get('CORE.WHEN');
 const delayOn = config.get('CORE.ON');
 const delayOff = config.get('CORE.OFF');
 
@@ -25,7 +24,9 @@ const forecast = new Forecast({
 
 class WeatherHub {
     constructor() {
-        this.lock = false;
+        // unlock when all is ready
+        this.lock = true;
+
         this.forecast = null;
 
         let q = new queue();
@@ -37,47 +38,36 @@ class WeatherHub {
             this.lock = false;
             this.run();
         });
-        
+
         // destroy queue later
         this.q = q;
     }
 
     run() {
         if (!this.lock) {
-            let now = new Date();
-            let h = now.getHours();
-            let m = now.getMinutes();
+            // now get the forecast
+            console.log('Checking Weather...');
+            forecast.get(forecastLatLon, (err, weather) => {
+                if (err) {
+                    // try again
+                    setTimeout(() => {
+                        this.run();
+                    }, 10000);
+                    return console.log(err);
+                }
 
-            // trigger
-            console.dir('Checking Time...');
-            if ((when.includes(h) && m === 0) || develop) {
-                // now get the forecast
-                console.dir('Checking Weather...');
-                forecast.get(forecastLatLon, (err, weather) => {
-                    if (err) {
-                        // try again
-                        setTimeout(() => {
-                            this.run();
-                        }, 10000);
-                        return console.dir(err);
-                    }
+                // data returned now check
+                let {
+                    precipProbability,
+                    temperature
+                } = weather.currently;
 
-                    // data returned now check
-                    let {
-                        cloudCover,
-                        temperature
-                    } = weather.currently;
+                console.log('Weather:', weather.currently);
 
-                    if (cloudCover < 1 && temperature > 5) {
-                        this.restartQueue();
-                    }
-                });
-
-            } else {
-                setTimeout(() => {
-                    this.run();
-                }, 5000);
-            }
+                if (precipProbability > 0.5 && temperature > 10) {
+                    this.restartQueue();
+                }
+            });
         }
     }
 
@@ -92,12 +82,12 @@ class WeatherHub {
         gpio.setPin(pin, state);
     }
 
-    start() {
+    init() {
         // wait for pins
         gpio.init(pins)
             .then(
                 () => {
-                    this.run();
+                    this.lock = false;
                 }
             );
     }
