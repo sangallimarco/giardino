@@ -64,7 +64,7 @@ class WeatherHub {
 
                 console.log('Weather:', weather.currently);
 
-                if (precipProbability > 0.5 && temperature > 10) {
+                if (precipProbability < 0.5 && temperature > 10) {
                     this.restartQueue();
                 }
             });
