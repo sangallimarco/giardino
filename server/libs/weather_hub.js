@@ -21,6 +21,7 @@ const forecast = new Forecast({
         seconds: 45
     }
 });
+const SocketRouter = require('./socket_router');
 
 class WeatherHub {
     constructor() {
@@ -32,10 +33,17 @@ class WeatherHub {
         let q = new queue();
         q.on('change', (pin, state) => {
             this.setPin(pin, state);
+            SocketRouter.broadcast('/queue', {
+                status: 'change',
+                pin 
+            });
         });
         q.on('end', () => {
             console.log('Ended');
             this.lock = false;
+            SocketRouter.broadcast('/queue', {
+                status: 'end'
+            });
         });
 
         // destroy queue later

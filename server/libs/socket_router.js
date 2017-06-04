@@ -30,7 +30,7 @@ class SocketRouter {
             } = route;
 
             // append to socket
-            socket.on(id, (data) => callback(this.io, socket, data));
+            socket.on(id, (payload) => callback(this.io, socket, payload));
         });
     }
 
@@ -42,6 +42,20 @@ class SocketRouter {
             id,
             callback
         });
+    }
+
+    /**
+     * Get io
+     */
+    getIo() {
+        return this.io;
+    }
+
+    /**
+     * Broadcast
+     */
+    broadcast(id, payload) {
+        this.io.sockets.emit(id, payload);
     }
 }
 
