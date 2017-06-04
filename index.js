@@ -23,7 +23,7 @@ cron.schedule(when, () => {
 
 // socket router
 SocketRouter.init(io);
-SocketRouter.use('client', (io, socket, payload) => {
+SocketRouter.use('/start', (io, socket, payload) => {
     console.log('Force Run!', payload);
     WeatherHub.run(true);
 
@@ -32,7 +32,7 @@ SocketRouter.use('client', (io, socket, payload) => {
     // });
 
     // to everyone
-    io.sockets.emit('server', {
+    io.sockets.emit('/start', {
         status: true
     });
 });
