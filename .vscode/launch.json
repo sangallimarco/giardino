@@ -13,7 +13,8 @@
             "env": {
                 "NODE_ENV": "development"
             },
-            "protocol": "inspector"
+            "protocol": "inspector",
+            "stopOnEntry": false
         }
     ]
 }

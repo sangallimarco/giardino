@@ -22,11 +22,17 @@ cron.schedule(when, () => {
 });
 
 // socket router
-const router = new SocketRouter(io);
-router.use('client', (socket, data) => {
-    console.log(data);
+SocketRouter.init(io);
+SocketRouter.use('client', (io, socket, payload) => {
+    console.log('Force Run!', payload);
+    WeatherHub.run();
 
-    socket.emit('server', {
+    // socket.emit('server', {
+    //     status: true
+    // });
+
+    // to everyone
+    io.sockets.emit('server', {
         status: true
     });
 });
