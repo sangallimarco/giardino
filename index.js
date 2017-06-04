@@ -9,7 +9,10 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 // static files
-app.use(express.static('app/build'));
+app.use('/', express.static('app/build'));
+app.get('/', (req, res) => {
+    res.sendfile(__dirname + '/app/build/index.html');
+});
 
 // first run
 WeatherHub.init();
@@ -32,21 +35,16 @@ cron.schedule(when, () => {
 
 // });
 
-// test
-app.get('/', (req, res) => {
-    res.sendfile(__dirname + '/app/build/index.html');
-});
-
 io.on('connection', (socket) => {
-    socket.emit('news', {
+    socket.emit('test', {
         hello: 'world'
     });
-    socket.on('my other event', (data) => {
+    socket.on('client', (data) => {
         console.log(data);
     });
 });
 
 
 server.listen(port, () => {
-    console.log('Listening on port 3000', port);
+    console.log('Listening on port', port);
 });
