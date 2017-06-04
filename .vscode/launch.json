@@ -12,7 +12,8 @@
             "program": "${workspaceRoot}/index.js",
             "env": {
                 "NODE_ENV": "development"
-            }
+            },
+            "protocol": "inspector"
         }
     ]
 }

@@ -46,31 +46,45 @@ class WeatherHub {
         if (!this.lock) {
             // now get the forecast
             console.log('Checking Weather...');
-            forecast.get(forecastLatLon, (err, weather) => {
-                if (err) {
+            this.getWeather()
+                .then(weather => {
+                    // data returned now check
+                    let {
+                        precipProbability,
+                        temperature
+                    } = weather;
+
+                    console.log('Weather:', weather);
+
+                    if (precipProbability < 0.5 && temperature > 10) {
+                        this.restartQueue();
+                    }
+                })
+                .catch(err => {
                     // try again
                     setTimeout(() => {
                         this.run();
                     }, 10000);
                     return console.log(err);
-                }
-
-                // data returned now check
-                let {
-                    precipProbability,
-                    temperature
-                } = weather.currently;
-
-                console.log('Weather:', weather.currently);
-
-                if (precipProbability < 0.5 && temperature > 10) {
-                    this.restartQueue();
-                }
-            });
+                });
         }
     }
 
+    getWeather() {
+        return new Promise((resolve, reject) => {
+            forecast.get(forecastLatLon, (err, weather) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(weather.currently);
+                }
+
+            });
+        });
+    }
+
     restartQueue() {
+        console.log('Restarting Queue...');
         this.lock = true;
         this.q.init(pins, delayOn, delayOff);
         this.q.run();
