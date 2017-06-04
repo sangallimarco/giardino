@@ -10,7 +10,7 @@ const io = require('socket.io')(server);
 const SocketRouter = require('./server/libs/socket_router');
 
 // static files
-app.use('/', express.static('app/build'));
+app.use('/app', express.static('app/build'));
 app.get('/', (req, res) => {
     res.sendfile(__dirname + '/app/build/index.html');
 });
