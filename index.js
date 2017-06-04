@@ -12,7 +12,7 @@ const SocketRouter = require('./server/libs/socket_router');
 // static files
 app.use('/app', express.static('app/build'));
 app.get('/', (req, res) => {
-    res.sendfile(__dirname + '/app/build/index.html');
+    res.sendFile(__dirname + '/app/build/index.html');
 });
 
 // first run
