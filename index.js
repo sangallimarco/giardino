@@ -32,7 +32,7 @@ SocketRouter.use('/start', (io, socket, payload) => {
     // });
 
     // to everyone
-    io.sockets.emit('/start', {
+    io.sockets.emit('/status', {
         status: true
     });
 });

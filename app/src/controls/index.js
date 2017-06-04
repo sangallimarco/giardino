@@ -13,13 +13,13 @@ export default class Controls extends Component {
     componentDidMount() {
 
         const actions  = {
-            '/start': payload => {
+            '/status': payload => {
                 let {status} = payload;
                 console.log('start', status);
                 this.setState({...this.state, status});
             }, 
             '/queue': payload => {
-                console.log(payload)
+                console.log(payload);
             }
         };
 
