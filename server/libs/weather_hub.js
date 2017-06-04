@@ -42,31 +42,38 @@ class WeatherHub {
         this.q = q;
     }
 
-    run() {
+    run(force = false) {
         if (!this.lock) {
             // now get the forecast
             console.log('Checking Weather...');
-            this.getWeather()
-                .then(weather => {
-                    // data returned now check
-                    let {
-                        precipProbability,
-                        temperature
-                    } = weather;
 
-                    console.log('Weather:', weather);
+            if (!force) {
+                this.getWeather()
+                    .then(weather => {
+                        // data returned now check
+                        let {
+                            precipProbability,
+                            temperature
+                        } = weather;
 
-                    if (precipProbability < 0.5 && temperature > 10) {
-                        this.restartQueue();
-                    }
-                })
-                .catch(err => {
-                    // try again
-                    setTimeout(() => {
-                        this.run();
-                    }, 10000);
-                    return console.log(err);
-                });
+                        console.log('Weather:', weather);
+
+                        if (precipProbability < 0.5 && temperature > 10) {
+                            this.restartQueue();
+                        }
+                    })
+                    .catch(err => {
+                        // try again
+                        setTimeout(() => {
+                            this.run();
+                        }, 10000);
+                        return console.log(err);
+                    });
+            } else {
+                this.restartQueue();
+            }
+        } else {
+            console.log('Already Running...');
         }
     }
 
