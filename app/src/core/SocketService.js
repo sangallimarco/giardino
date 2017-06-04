@@ -1,6 +1,6 @@
 export default class SocketService {
     constructor(host = 'localhost') {
-        this.socket = window.io.connect(`http://${host}:3333`);
+        this.socket = window.io.connect(`http://${host}`);
     }
 
     next(id, payload) {
