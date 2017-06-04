@@ -11,11 +11,19 @@ export default class Controls extends Component {
     }
 
     componentDidMount() {
-        SocketServiceSingleton.subscribe('/start', payload => {
-            let {status} = payload;
-            console.log(status);
-            this.setState({...this.state, status});
-        });
+
+        const actions  = {
+            '/start': payload => {
+                let {status} = payload;
+                console.log('start', status);
+                this.setState({...this.state, status});
+            }, 
+            '/queue': payload => {
+                console.log(payload)
+            }
+        };
+
+        SocketServiceSingleton.dispatch(actions);
     }
 
     handleClick(evt) {

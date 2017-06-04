@@ -15,4 +15,13 @@ export default class SocketService {
         });
     }
 
+    dispatch(actions) {
+        let keys = Object.keys(actions);
+
+        keys.forEach(id => {
+            let resolve = actions[id];
+            this.subscribe(id, resolve);
+        });
+    }
+
 }
