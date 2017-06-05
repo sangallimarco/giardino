@@ -24,4 +24,12 @@ export default class SocketService {
         });
     }
 
+    destroy(actions) {
+        let keys = Object.keys(actions);
+
+        keys.forEach(id => {
+            this.socket.off(id, actions[id]);
+        });
+    }
+
 }

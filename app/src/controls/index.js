@@ -8,11 +8,12 @@ export default class Controls extends Component {
         this.state = {
             status: false
         };
+        this.actions = {};
     }
 
     componentDidMount() {
 
-        const actions  = {
+        this.actions  = {
             '/status': payload => {
                 let {status} = payload;
                 console.log('start', status);
@@ -23,7 +24,11 @@ export default class Controls extends Component {
             }
         };
 
-        SocketServiceSingleton.dispatch(actions);
+        SocketServiceSingleton.dispatch(this.actions);
+    }
+
+    componentDidUnmount() {
+        SocketServiceSingleton.destroy(this.actions);
     }
 
     handleClick(evt) {
