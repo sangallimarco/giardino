@@ -1,5 +1,5 @@
 export default class SocketService {
-    constructor(host = 'localhost') {
+    constructor() {
         this.socket = window.io.connect();
     }
 
