@@ -27,7 +27,7 @@ export default class Controls extends Component {
         SocketServiceSingleton.dispatch(this.actions);
     }
 
-    componentDidUnmount() {
+    componentWillUnmount() {
         SocketServiceSingleton.destroy(this.actions);
     }
 
