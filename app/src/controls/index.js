@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import {SocketServiceSingleton} from '../core';
+import Progress from 'antd/lib/progress';
+import Button from 'antd/lib/button';
 import './index.css';
+import Layout from 'antd/lib/layout';
+const { Header, Footer, Sider, Content } = Layout;
 
 export default class Controls extends Component {
+    
     constructor(props){
         super(props);
         this.state = {
-            status: false
+            status: false,
+            percent: 0
         };
         this.actions = {};
     }
@@ -17,10 +23,13 @@ export default class Controls extends Component {
             '/status': payload => {
                 let {status} = payload;
                 console.log('start', status);
-                this.setState({...this.state, status});
+                this.setState(Object.assign(this.state, {status}));
             }, 
             '/queue': payload => {
-                console.log(payload);
+                let {queued, items} = payload;
+                let percent = ((items - queued) / items) * 100;
+                console.log(percent);
+                this.setState(Object.assign(this.state, {percent}));
             }
         };
 
@@ -32,7 +41,6 @@ export default class Controls extends Component {
     }
 
     handleClick(evt) {
-        console.log(evt);
         SocketServiceSingleton.next('/start', {status: true});
     }
 
@@ -41,13 +49,16 @@ export default class Controls extends Component {
     }
 
     render(){
-        let {status} = this.state;
+        let {status, percent} = this.state;
         let icon = this.renderIcon(status);
 
         return (
             <div>
-                <button onClick={this.handleClick}>Test</button>
-                <div>{icon}</div>
+                <Layout>
+                    <Header>Fun Watering!</Header>
+                    <Content><Progress type="dashboard" percent={percent} /></Content>
+                    <Footer><Button type="primary" onClick={this.handleClick}>Test</Button></Footer>
+                </Layout>
             </div>
         );
     }

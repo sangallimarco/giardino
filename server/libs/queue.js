@@ -4,6 +4,7 @@ class Queue extends EventEmitter {
     constructor() {
         super();
         this.queue = [];
+        this.queueLength = 0;
     }
 
     init(pins, delayOn = 2000, delayOff = 3000) {
@@ -13,6 +14,8 @@ class Queue extends EventEmitter {
                 this.createItem(x, false, delayOff)
             );
         });
+
+        this.queueLength = this.queue.length;
     }
 
     createItem(pin, status, delay) {
@@ -33,7 +36,10 @@ class Queue extends EventEmitter {
                     status,
                     delay
                 } = item;
-                this.emit('change', pin, status);
+                let queued = this.queue.length;
+                let queueLength = this.queueLength;
+
+                this.emit('change', pin, status, queued, queueLength);
                 setTimeout(() => {
                     this.run();
                 }, delay);

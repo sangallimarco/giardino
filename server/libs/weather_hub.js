@@ -31,19 +31,22 @@ class WeatherHub {
         this.forecast = null;
 
         let q = new queue();
-        q.on('change', (pin, state) => {
+        q.on('change', (pin, state, queued, items) => {
             this.setPin(pin, state);
             SocketRouter.broadcast('/queue', {
                 status: 'change',
+                state,
+                queued,
+                items,
                 pin 
             });
         });
         q.on('end', () => {
             console.log('Ended');
             this.lock = false;
-            SocketRouter.broadcast('/queue', {
-                status: 'end'
-            });
+            // SocketRouter.broadcast('/queue', {
+            //     status: 'end'
+            // });
         });
 
         // destroy queue later
