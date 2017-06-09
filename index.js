@@ -7,6 +7,8 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+// io.set('transports', ['websocket']);
+
 const SocketRouter = require('./server/libs/socket_router');
 
 // static files
