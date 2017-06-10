@@ -14,7 +14,7 @@ const SocketRouter = require('./server/libs/socket_router');
 // static files
 app.disable('etag');
 app.use('/app', express.static('app/build'));
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     res.sendFile(__dirname + '/app/build/index.html');
 });
 
