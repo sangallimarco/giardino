@@ -13,15 +13,6 @@ const SocketRouter = require('./server/libs/socket_router');
 
 // static files
 app.disable('etag');
-if (process.env.NODE_ENV === 'development') {
-    //ENABLE CORS
-    app.all('/', (req, res, next) => {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        next();
-    });
-}
-
 app.use('/app', express.static('app/build'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/app/build/index.html');

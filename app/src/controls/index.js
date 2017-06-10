@@ -7,7 +7,7 @@ import Layout from 'antd/lib/layout';
 const { Header, Footer, Sider, Content } = Layout;
 
 export default class Controls extends Component {
-    
+
     constructor(props){
         super(props);
         this.state = {
@@ -55,7 +55,7 @@ export default class Controls extends Component {
         return (
             <div>
                 <Layout>
-                    <Header>Fun Watering!</Header>
+                    <Header>Fun Watering! 2</Header>
                     <Content><Progress type="dashboard" percent={percent} /></Content>
                     <Footer><Button type="primary" onClick={this.handleClick}>Test</Button></Footer>
                 </Layout>
