@@ -14,8 +14,8 @@ export default class Controls extends StreamComponent {
         super(props);
         this.state = {
             status: false,
-            percent: 0,
-            icon: 'play-circle'
+            percent: 100,
+            icon: 'caret-right'
         };
     }
 
@@ -35,7 +35,7 @@ export default class Controls extends StreamComponent {
                 this.setState(Object.assign(this.state, {percent, icon}));
             },
             '/end': payload => {
-                let icon = 'play-circle';
+                let icon = 'caret-right';
                 this.setState(Object.assign(this.state, {icon}));
             }
         };
@@ -47,8 +47,12 @@ export default class Controls extends StreamComponent {
         SocketServiceSingleton.destroy(this.actions);
     }
 
-    handleClick(evt) {
+    handlePlay(evt) {
         SocketServiceSingleton.next('/start', {status: true});
+    }
+
+    handleStop(evt) {
+        SocketServiceSingleton.next('/stop', {status: true});
     }
 
     render(){
@@ -60,7 +64,10 @@ export default class Controls extends StreamComponent {
                     <Progress className="controls-progress" type="dashboard" percent={percent} />
                 </div>
                 <div className="controls-container">
-                    <Button icon={icon} className="controls-button" type="primary" onClick={this.handleClick}></Button>
+                    <Button icon={icon} className="controls-button" type="primary" onClick={this.handlePlay}></Button>
+                </div>
+                <div className="controls-container">
+                    <Button icon="close" className="controls-button controls-button-danger" type="danger" onClick={this.handleStop}></Button>
                 </div>
             </div>
         );

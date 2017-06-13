@@ -5,15 +5,30 @@ class Queue extends EventEmitter {
         super();
         this.queue = [];
         this.queueLength = 0;
+        this.timer = null;
     }
 
-    init(pins, delayOn = 2000, delayOff = 3000) {
+    init(pins, delayOn = 2000, delayOff = 3000, switcher = true) {
+        this.queue = [];
+
+        if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+
+        console.log(switcher);
+
         pins.forEach(x => {
-            this.queue.push(
+            let items = switcher ? [
                 this.createItem(x, true, delayOn),
                 this.createItem(x, false, delayOff)
-            );
+            ] : [
+                this.createItem(x, false, delayOff)
+            ];
+            this.queue.push(...items);
         });
+
+        console.log();
 
         this.queueLength = this.queue.length;
     }
@@ -40,7 +55,7 @@ class Queue extends EventEmitter {
                 let queueLength = this.queueLength;
 
                 this.emit('change', pin, status, queued, queueLength);
-                setTimeout(() => {
+                this.timer = setTimeout(() => {
                     this.run();
                 }, delay);
             }

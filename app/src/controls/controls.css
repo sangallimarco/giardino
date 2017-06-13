@@ -5,19 +5,24 @@
 
 .controls-container {
     /*display: flex;*/
+    padding: 15px;
     flex-grow: 1;
     flex-basis: 0;
 }
 
 .controls-progress {
-    padding: 20px;
     font-size: 24px;
 }
 
 .controls-button {
-    padding: 20px;
+    cursor: pointer;
     font-size: 24px;
     border-radius: 50%;
     height: 100px;
     width: 100px;
+}
+
+.controls-button-danger {
+    background: red;
+    color: white;
 }

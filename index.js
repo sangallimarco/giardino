@@ -39,6 +39,14 @@ SocketRouter.use('/start', (io, socket, payload) => {
         status: true
     });
 });
+SocketRouter.use('/stop', (io, socket, payload) => {
+    console.log('Force Stop!', payload);
+    WeatherHub.stop();
+    // to everyone
+    io.sockets.emit('/status', {
+        status: false
+    });
+});
 
 server.listen(port, () => {
     console.log('Listening on port', port);

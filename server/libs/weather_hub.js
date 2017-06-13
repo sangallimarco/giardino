@@ -104,7 +104,14 @@ class WeatherHub {
     restartQueue() {
         console.log('Restarting Queue...');
         this.lock = true;
-        this.q.init(pins, delayOn, delayOff);
+        this.q.init(pins, delayOn, delayOff, true);
+        this.q.run();
+    }
+
+    stop() {
+        console.log('Stopping Queue...');
+        this.lock = true;
+        this.q.init(pins, delayOn, delayOff, false);
         this.q.run();
     }
 
