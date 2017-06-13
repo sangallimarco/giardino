@@ -35,7 +35,7 @@ class SocketRouter {
     }
 
     /**
-     * Emulates Router
+     * Emulate Router
      */
     use(id, callback) {
         this.routes.push({

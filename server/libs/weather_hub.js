@@ -38,15 +38,15 @@ class WeatherHub {
                 state,
                 queued,
                 items,
-                pin 
+                pin
             });
         });
         q.on('end', () => {
             console.log('Ended');
             this.lock = false;
-            // SocketRouter.broadcast('/queue', {
-            //     status: 'end'
-            // });
+            SocketRouter.broadcast('/end', {
+                status: false
+            });
         });
 
         // destroy queue later

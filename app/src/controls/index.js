@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
+import {StreamManager, StreamComponent} from 'react-rxjs-stream';
 import {SocketServiceSingleton} from '../core';
+import Streams from '../Streams';
 import Progress from 'antd/lib/progress';
 import Button from 'antd/lib/button';
-import './index.css';
 import Layout from 'antd/lib/layout';
-const { Header, Footer, Sider, Content } = Layout;
+import './controls.css';
+const { Header, Footer, Sider, Content, Row, Col} = Layout;
 
-export default class Controls extends Component {
+export default class Controls extends StreamComponent {
 
     constructor(props){
         super(props);
         this.state = {
             status: false,
-            percent: 0
+            percent: 0,
+            icon: 'play-circle'
         };
-        this.actions = {};
     }
 
     componentDidMount() {
@@ -28,8 +30,13 @@ export default class Controls extends Component {
             '/queue': payload => {
                 let {queued, items} = payload;
                 let percent = ((items - queued) / items) * 100;
+                let icon = 'sync';
                 console.log(percent);
-                this.setState(Object.assign(this.state, {percent}));
+                this.setState(Object.assign(this.state, {percent, icon}));
+            },
+            '/end': payload => {
+                let icon = 'play-circle';
+                this.setState(Object.assign(this.state, {icon}));
             }
         };
 
@@ -44,21 +51,17 @@ export default class Controls extends Component {
         SocketServiceSingleton.next('/start', {status: true});
     }
 
-    renderIcon(value) {
-        return value ? 'iconOn': 'iconOff';
-    }
-
     render(){
-        let {status, percent} = this.state;
-        let icon = this.renderIcon(status);
+        let {status, percent, icon} = this.state;
 
         return (
-            <div>
-                <Layout>
-                    <Header>Fun Watering! 2</Header>
-                    <Content><Progress type="dashboard" percent={percent} /></Content>
-                    <Footer><Button type="primary" onClick={this.handleClick}>Test</Button></Footer>
-                </Layout>
+            <div className="controls">
+                <div className="controls-container">
+                    <Progress className="controls-progress" type="dashboard" percent={percent} />
+                </div>
+                <div className="controls-container">
+                    <Button icon={icon} className="controls-button" type="primary" onClick={this.handleClick}></Button>
+                </div>
             </div>
         );
     }

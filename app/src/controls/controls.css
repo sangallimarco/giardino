@@ -1,0 +1,23 @@
+.controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-container {
+    /*display: flex;*/
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.controls-progress {
+    padding: 20px;
+    font-size: 24px;
+}
+
+.controls-button {
+    padding: 20px;
+    font-size: 24px;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}
