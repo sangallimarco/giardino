@@ -4,6 +4,7 @@
   "description": "watering system",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "config": "^1.26.1",
     "express": "^4.15.3",
     "forecast": "^0.3.2",

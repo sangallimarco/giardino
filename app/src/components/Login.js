@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {LoginService} from './LoginService';
+import LoginService from './LoginService';
 
 export default class Login extends Component {
 
@@ -17,6 +17,9 @@ export default class Login extends Component {
         let state = Object.assign(this.state, {email});
         this.setState(state);
 
+        if (evt.key === 'Enter') {
+            LoginService.requestOTP(email);
+        }
     }
 
     handleSubmit() {
@@ -28,7 +31,7 @@ export default class Login extends Component {
             type="email"
             name="email"
             placeholder="Email"
-            onChange={(evt) => this.handleEmail(evt)}/>);
+            onKeyPress={(evt) => this.handleEmail(evt)}/>);
     }
 
 }
