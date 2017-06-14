@@ -1,5 +1,6 @@
 class SocketRouter {
-    init(io) {
+    
+    init(io, token = null) {
         this.io = io;
         this.routes = [];
 

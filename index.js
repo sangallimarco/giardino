@@ -8,6 +8,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 // io.set('transports', ['websocket']);
+const routes = require('./server/routes');
 
 const SocketRouter = require('./server/libs/socket_router');
 
@@ -47,6 +48,9 @@ SocketRouter.use('/stop', (io, socket, payload) => {
         status: false
     });
 });
+
+// login
+app.use(routes);
 
 server.listen(port, () => {
     console.log('Listening on port', port);

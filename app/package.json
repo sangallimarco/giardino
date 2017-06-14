@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "antd": "^2.11.0",
+    "barbarojs-http": "^1.0.9",
     "d3": "^4.9.1",
     "d3-shape": "^1.2.0",
+    "history": "^4.6.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-router": "^4.1.1",
     "react-rxjs-stream": "0.0.4"
   },
   "devDependencies": {

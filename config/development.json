@@ -11,5 +11,6 @@
     },
     "API": {
         "PORT": 4000
-    }
+    },
+    "ALLOWED": ["sangalli.marco@gmail.com"]
 }
