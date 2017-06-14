@@ -1,10 +1,19 @@
 {
     "FORECAST": {
         "KEY": "dbc03034b28dc9a934d3725985f7b8c0",
-        "LATLON": [45.8023, 9.2907]
+        "LATLON": [
+            45.8023,
+            9.2907
+        ]
     },
     "CORE": {
-        "PINS": [7, 11, 13, 15, 19],
+        "PINS": [
+            7,
+            11,
+            13,
+            15,
+            19
+        ],
         "ON": 5000,
         "OFF": 2000,
         "CRON": "*/10 * * * *"
@@ -12,5 +21,8 @@
     "API": {
         "PORT": 4000
     },
-    "ALLOWED": ["sangalli.marco@gmail.com"]
+    "ALLOWED": [
+        "sangalli.marco@gmail.com"
+    ],
+    "TOTP": "QmFydE1hbjEr"
 }
