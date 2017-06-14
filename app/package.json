@@ -1,0 +1,29 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "/app",
+  "proxy": {
+    "/socket.io": {
+      "target": "http://localhost:4000",
+      "ws": true
+    }
+  },
+  "dependencies": {
+    "antd": "^2.11.0",
+    "d3": "^4.9.1",
+    "d3-shape": "^1.2.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-rxjs-stream": "0.0.4"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

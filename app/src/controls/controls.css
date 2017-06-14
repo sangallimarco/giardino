@@ -1,0 +1,28 @@
+.controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-container {
+    /*display: flex;*/
+    padding: 15px;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.controls-progress {
+    font-size: 24px;
+}
+
+.controls-button {
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+.controls-button-danger {
+    background: red;
+    color: white;
+}
