@@ -16,8 +16,6 @@ class Queue extends EventEmitter {
             this.timer = null;
         }
 
-        console.log(switcher);
-
         pins.forEach(x => {
             let items = switcher ? [
                 this.createItem(x, true, delayOn),
@@ -27,8 +25,6 @@ class Queue extends EventEmitter {
             ];
             this.queue.push(...items);
         });
-
-        console.log();
 
         this.queueLength = this.queue.length;
     }
@@ -56,7 +52,7 @@ class Queue extends EventEmitter {
 
                 this.emit('change', pin, status, queued, queueLength);
                 this.timer = setTimeout(() => {
-                    this.run();
+                    this.run(true);
                 }, delay);
             }
         } else {

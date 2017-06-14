@@ -27,21 +27,31 @@ class WeatherHub {
     constructor() {
         // unlock when all is ready
         this.lock = true;
-
         this.forecast = null;
+        this.state = {
+            pin: 0,
+            state: false,
+            queued: 0,
+            items: 0
+        };
 
         let q = new queue();
         q.on('change', (pin, state, queued, items) => {
             this.setPin(pin, state);
-            SocketRouter.broadcast('/queue', {
-                status: 'change',
+            // set state
+            Object.assign(this.state, {
+                pin,
                 state,
                 queued,
-                items,
-                pin
+                items
             });
+            // send updates
+            this.sendUpdates();
         });
         q.on('end', () => {
+            // stop updates
+            this.stopUpdates();
+
             console.log('Ended');
             this.lock = false;
             SocketRouter.broadcast('/end', {
@@ -51,6 +61,8 @@ class WeatherHub {
 
         // destroy queue later
         this.q = q;
+
+
     }
 
     run(force = false) {
@@ -129,6 +141,27 @@ class WeatherHub {
                     this.lock = false;
                 }
             );
+    }
+
+    // send updates periodically
+    sendUpdates() {
+        if (!this.interval) {
+            this.interval = setInterval(() => this.sendState(), 1000);
+        }
+    }
+
+    stopUpdates() {
+        clearInterval(this.interval);
+        this.interval = null;
+    }
+
+    sendState() {
+        let status = 'change';
+        let payload = Object.assign({}, this.state, {
+            status
+        });
+        console.log(payload);
+        SocketRouter.broadcast('/queue', payload);
     }
 
 }
