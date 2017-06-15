@@ -4,8 +4,15 @@ const AuthService = require('./auth_service');
 
 router.post('/otp', (req, res, next) => {
     let {email} = req.body;
-    AuthService.requestOTP(email);
-    res.json({});
+    let requested = AuthService.requestOTP(email);
+
+    if (requested) {
+        res.json({});
+    } else {
+        res
+            .status(403)
+            .json({});
+    }
 });
 
 router.post('/token', (req, res, next) => {

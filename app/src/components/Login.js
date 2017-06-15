@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import LoginService from '../core/LoginService';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
+import Alert from 'antd/lib/alert';
 import './login.css';
 
 export default class Login extends Component {
@@ -20,9 +21,15 @@ export default class Login extends Component {
         let email = evt.target.value;
         // check format here
         if (email) {
-            let state = Object.assign(this.state, {email, insertCode: true});
-            this.setState(state);
-            LoginService.requestOTP(email);
+            this.setState(Object.assign(this.state, {email, error: false}));
+            LoginService
+                .requestOTP(email)
+                .then(res => {
+                    this.setState(Object.assign(this.state, {insertCode: true}));
+                })
+                .catch(err => {
+                    this.setState(Object.assign(this.state, {error: true}));
+                });
         }
     }
 
@@ -48,28 +55,45 @@ export default class Login extends Component {
             });
     }
 
+    renderEmail() {
+        return (<Input
+            type="email"
+            name="email"
+            id="email"
+            size="large"
+            placeholder="Email"
+            onPressEnter={(evt) => this.handleEmail(evt)}/>);
+    }
+
+    renderCode() {
+        return (<Input
+            type="number"
+            defaultValue=""
+            autoComplete="nope"
+            id="otp"
+            name="otp"
+            size="large"
+            placeholder="Code"
+            onPressEnter={(evt) => this.handleSubmit(evt)}/>);
+    }
+
+    renderError(message) {
+        return (<Alert message={message} description="Email Not Recognised" type="error"/>);
+    }
+
     render() {
 
         let {insertCode} = this.state;
+        let input = insertCode
+            ? this.renderCode()
+            : this.renderEmail();
 
         return (
             <div className="login">
+                {insertCode}
                 <div className="login-card">
                     <div className="login-title">Please Login</div>
-                    <Input
-                        type="email"
-                        name="email"
-                        size="large"
-                        disabled={insertCode}
-                        placeholder="Email"
-                        onPressEnter={(evt) => this.handleEmail(evt)}/>
-                    <Input
-                        type="text"
-                        name="otp"
-                        size="large"
-                        disabled={!insertCode}
-                        placeholder="Code (check your email)"
-                        onPressEnter={(evt) => this.handleSubmit(evt)}/>
+                    {input}
                 </div>
             </div>
         );

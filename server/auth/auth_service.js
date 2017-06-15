@@ -18,6 +18,9 @@ class AuthService {
             sender.send('sangalli.marco@gmail.com', email, 'password', {
                 token
             }, 'otp.html');
+            return true;
+        } else {
+            return false;
         }
     }
 
