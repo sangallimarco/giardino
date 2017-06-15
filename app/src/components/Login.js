@@ -13,7 +13,8 @@ export default class Login extends Component {
         this.state = {
             email: null,
             otp: null,
-            insertCode: false
+            insertCode: false,
+            error: null
         };
     }
 
@@ -28,7 +29,7 @@ export default class Login extends Component {
                     this.setState(Object.assign(this.state, {insertCode: true}));
                 })
                 .catch(err => {
-                    this.setState(Object.assign(this.state, {error: true}));
+                    this.setState(Object.assign(this.state, {error: 'Email Error'}));
                 });
         }
     }
@@ -51,7 +52,7 @@ export default class Login extends Component {
                     .push(location);
             })
             .catch(err => {
-                console.log('error');
+                 this.setState(Object.assign(this.state, {error: 'Code Error'}));
             });
     }
 
@@ -78,15 +79,16 @@ export default class Login extends Component {
     }
 
     renderError(message) {
-        return (<Alert message={message} description="Email Not Recognised" type="error"/>);
+        return (<Alert message={message} type="error" showIcon/>);
     }
 
     render() {
 
-        let {insertCode} = this.state;
+        let {insertCode, error} = this.state;
         let input = insertCode
             ? this.renderCode()
             : this.renderEmail();
+        let alert = error ? this.renderError(error) : '';
 
         return (
             <div className="login">
@@ -94,6 +96,7 @@ export default class Login extends Component {
                 <div className="login-card">
                     <div className="login-title">Please Login</div>
                     {input}
+                    {alert}
                 </div>
             </div>
         );

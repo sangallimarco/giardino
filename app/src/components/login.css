@@ -11,6 +11,10 @@
     flex-direction: column;
 }
 
+.login-card > input {
+    margin: 10px 0;
+}
+
 .login-title {
     font-size: 16px;
     font-weight: 700;
