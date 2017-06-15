@@ -9,6 +9,12 @@ class SocketService {
             .io
             .connect();
 
+        socket.on('disconnect', () => {
+            window
+                .location
+                .reload();
+        });
+
         // JWT
         return new Promise((resolve, reject) => {
             socket.on('connect', () => {
