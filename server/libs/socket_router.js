@@ -1,48 +1,55 @@
+const socketioJwt = require('socketio-jwt');
+const config = require('config');
+const secret = config.get('SECRET');
+
 class SocketRouter {
-    
-    init(io, token = null) {
+
+    init(io) {
         this.io = io;
         this.routes = [];
 
         // init socket and append all routes
-        this.io.on('connection', socket => {
-            this.appendRoutes(socket);
+        this
+            .io
+            .on('connection', socketioJwt.authorize({secret, timeout: 15000}))
+            .on('authenticated', socket => {
+                //this socket is authenticated, we are good to handle more events from it.
+                console.log('User:' + socket.decoded_token);
 
-            socket.on('disconnect',
-                socket => {
+                // allow all routes
+                this.appendRoutes(socket);
+
+                socket.on('disconnect', socket => {
                     console.log(socket);
                 });
 
-            socket.on('disconnecting',
-                socket => {
+                socket.on('disconnecting', socket => {
                     console.log(socket);
                 });
-        });
+            });
     }
 
     /**
      * Subscribe socket to all routes
      */
     appendRoutes(socket) {
-        this.routes.forEach(route => {
-            let {
-                id,
-                callback
-            } = route;
+        this
+            .routes
+            .forEach(route => {
+                let {id, callback} = route;
 
-            // append to socket
-            socket.on(id, (payload) => callback(this.io, socket, payload));
-        });
+                // append to socket
+                socket.on(id, (payload) => callback(this.io, socket, payload));
+            });
     }
 
     /**
      * Emulate Router
      */
     use(id, callback) {
-        this.routes.push({
-            id,
-            callback
-        });
+        this
+            .routes
+            .push({id, callback});
     }
 
     /**
@@ -56,7 +63,10 @@ class SocketRouter {
      * Broadcast
      */
     broadcast(id, payload) {
-        this.io.sockets.emit(id, payload);
+        this
+            .io
+            .sockets
+            .emit(id, payload);
     }
 }
 

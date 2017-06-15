@@ -1,4 +1,18 @@
 .login {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.login-card {
+    width: 400px;
+    display: flex;
     flex-direction: column;
+}
+
+.login-title {
+    font-size: 16px;
+    font-weight: 700;
+    padding: 20px;
 }

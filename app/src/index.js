@@ -9,7 +9,7 @@ const hashHistory = createHistory();
 
 ReactDOM.render((
     <Router history={hashHistory}>
-        <Route path="/" component={App}/>
+        <Route path="/" component={App}></Route>
     </Router>
 ), document.getElementById('root'));
 registerServiceWorker();

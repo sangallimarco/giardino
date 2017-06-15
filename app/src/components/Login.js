@@ -32,7 +32,16 @@ export default class Login extends Component {
         LoginService
             .requestToken(email, otp)
             .then(res => {
-                console.log('ok');
+                console.log(this.props);
+                const location = {
+                    pathname: '/controls',
+                    state: {}
+                };
+
+                this
+                    .props
+                    .history
+                    .push(location);
             })
             .catch(err => {
                 console.log('error');
@@ -45,17 +54,23 @@ export default class Login extends Component {
 
         return (
             <div className="login">
-                <Input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    onPressEnter={(evt) => this.handleEmail(evt)}/>
-                <Input
-                    type="text"
-                    name="otp"
-                    disabled={!insertCode}
-                    placeholder="Code (check your email)"
-                    onPressEnter={(evt) => this.handleSubmit(evt)}/>
+                <div className="login-card">
+                    <div className="login-title">Please Login</div>
+                    <Input
+                        type="email"
+                        name="email"
+                        size="large"
+                        disabled={insertCode}
+                        placeholder="Email"
+                        onPressEnter={(evt) => this.handleEmail(evt)}/>
+                    <Input
+                        type="text"
+                        name="otp"
+                        size="large"
+                        disabled={!insertCode}
+                        placeholder="Code (check your email)"
+                        onPressEnter={(evt) => this.handleSubmit(evt)}/>
+                </div>
             </div>
         );
     }

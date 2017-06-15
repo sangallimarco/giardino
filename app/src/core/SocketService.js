@@ -1,50 +1,73 @@
 class SocketService {
+
     constructor() {
-        this.token = '';
-        this.socket = window
+        this.socket = null;
+    }
+
+    init(token) {
+        let socket = window
             .io
             .connect();
+
+        // JWT
+        return new Promise((resolve, reject) => {
+            socket.on('connect', () => {
+                socket.emit('authenticate', {token});
+
+                socket.on('authenticated', () => {
+                    this.socket = socket;
+                    resolve(socket);
+                });
+
+                socket.on('unauthorized', (msg) => {
+                    this.socket = null;
+                    reject(msg.data);
+                });
+            });
+        });
+
     }
 
     emit(id, payload) {
-        let token = this.token;
-        let data = Object.assign({}, payload, {token});
-        this
-            .socket
-            .emit(id, data);
+        if (this.socket) {
+            this
+                .socket
+                .emit(id, payload);
+        }
     }
 
     subscribe(id, resolve) {
-        this
-            .socket
-            .on(id, (payload) => {
-                resolve(payload);
-            });
+        if (this.socket) {
+            this
+                .socket
+                .on(id, (payload) => {
+                    resolve(payload);
+                });
+        }
     }
 
     dispatch(actions) {
-        let keys = Object.keys(actions);
+        if (this.socket) {
+            let keys = Object.keys(actions);
 
-        keys.forEach(id => {
-            let resolve = actions[id];
-            this.subscribe(id, resolve);
-        });
+            keys.forEach(id => {
+                let resolve = actions[id];
+                this.subscribe(id, resolve);
+            });
+        }
     }
 
     destroy(actions) {
-        let keys = Object.keys(actions);
+        if (this.socket) {
+            let keys = Object.keys(actions);
 
-        keys.forEach(id => {
-            this
-                .socket
-                .off(id, actions[id]);
-        });
+            keys.forEach(id => {
+                this
+                    .socket
+                    .off(id, actions[id]);
+            });
+        }
     }
-
-    setToken(token) {
-        this.token = token;
-    }
-
 }
 
 export default new SocketService();
