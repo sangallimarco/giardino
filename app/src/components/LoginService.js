@@ -9,13 +9,13 @@ class LoginServiceClass {
     }
 
     // send OTP to server and get JWT back
-    requestToken(otp) {
+    requestToken(email, otp) {
         let conn = new http('/api/token');
-        return conn.post({otp});
+        return conn.post({email, otp});
     }
 
 }
 
-const LoginService =  new LoginServiceClass();
+const LoginService = new LoginServiceClass();
 
 export default LoginService;

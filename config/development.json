@@ -28,5 +28,6 @@
     "MAILER": {
         "DOMAIN": "sandboxff0242b203f845c18cda072d02f7f12f.mailgun.org",
         "KEY": "key-52841e820f089ae05361a0823d4f0e42"
-    }
+    },
+    "SECRET": "BartMan1"
 }

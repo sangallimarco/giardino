@@ -9,7 +9,7 @@ const bodyParser = require('body-parser')
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 // io.set('transports', ['websocket']);
-const routes = require('./server/routes');
+const routes = require('./server/auth/routes');
 
 const SocketRouter = require('./server/libs/socket_router');
 
