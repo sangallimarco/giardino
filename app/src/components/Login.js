@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import LoginService from './LoginService';
+import LoginService from '../core/LoginService';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import './login.css';
@@ -21,7 +21,6 @@ export default class Login extends Component {
         // check format here
         if (email) {
             let state = Object.assign(this.state, {email, insertCode: true});
-
             this.setState(state);
             LoginService.requestOTP(email);
         }
@@ -30,7 +29,14 @@ export default class Login extends Component {
     handleSubmit(evt) {
         let otp = evt.target.value;
         let {email} = this.state;
-        LoginService.requestToken(email, otp);
+        LoginService
+            .requestToken(email, otp)
+            .then(res => {
+                console.log('ok');
+            })
+            .catch(err => {
+                console.log('error');
+            });
     }
 
     render() {

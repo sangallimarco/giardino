@@ -1,16 +1,25 @@
-export default class SocketService {
+class SocketService {
     constructor() {
-        this.socket = window.io.connect();
+        this.token = '';
+        this.socket = window
+            .io
+            .connect();
     }
 
-    next(id, payload) {
-        this.socket.emit(id, payload);
+    emit(id, payload) {
+        let token = this.token;
+        let data = Object.assign({}, payload, {token});
+        this
+            .socket
+            .emit(id, data);
     }
 
     subscribe(id, resolve) {
-        this.socket.on(id, (payload) => {
-            resolve(payload);
-        });
+        this
+            .socket
+            .on(id, (payload) => {
+                resolve(payload);
+            });
     }
 
     dispatch(actions) {
@@ -26,8 +35,16 @@ export default class SocketService {
         let keys = Object.keys(actions);
 
         keys.forEach(id => {
-            this.socket.off(id, actions[id]);
+            this
+                .socket
+                .off(id, actions[id]);
         });
     }
 
+    setToken(token) {
+        this.token = token;
+    }
+
 }
+
+export default new SocketService();

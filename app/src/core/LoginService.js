@@ -1,4 +1,5 @@
 import {http} from 'barbarojs-http';
+import SocketService from './SocketService';
 
 class LoginServiceClass {
 
@@ -11,7 +12,14 @@ class LoginServiceClass {
     // send OTP to server and get JWT back
     requestToken(email, otp) {
         let conn = new http('/api/token');
-        return conn.post({email, otp});
+        return conn
+            .post({email, otp})
+            .then(res => res.json())
+            .then(data => {
+                let {token} = data;
+                SocketService.setToken(token);
+                return true;
+            });
     }
 
 }
