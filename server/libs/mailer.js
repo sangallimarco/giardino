@@ -4,45 +4,60 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const handlebars = require('handlebars');
 const config = require('config');
+const mailgun = require('nodemailer-mailgun-transport');
+
+const auth = {
+  auth: {
+    api_key: config.get('MAILER.KEY'),
+    domain: config.get('MAILER.DOMAIN')
+  }
+};
+
 
 /**
  * Mailer
  */
-class mailer {
+class Mailer {
 
-	constructor(fromA, subject) {
-		this.fromA = fromA;
-		this.subject = subject;
-		this.template = '';
-
-		// Create reusable transporter object using the default SMTP transport
-		this.transporter = nodemailer.createTransport('direct');
+	constructor() {
+		let transport = mailgun(auth);
+		this.transporter = nodemailer.createTransport(transport);
 	}
 
 	loadTemplate(template) {
-		fs.readFile(
-			`${__dirname}/../templates/${template}`,
-			(err, content) => {
-				if (err) {
-					throw err;
-				}
+		return new Promise((resolve, reject) => {
+			fs.readFile(
+				`${__dirname}/../templates/${template}`,
+				(err, content) => {
+					if (err) {
+						reject(err);
+					}
 
-				this.template = handlebars.compile(content.toString());
+					let message = handlebars.compile(content.toString());
+					resolve(message);
+				}
+			);
+		});
+		
+	}
+
+	send(from, to, subject, data, templateName) {
+		this.loadTemplate(templateName)
+		.then(
+			template => {
+				let html = template(data);
+				let mailOptions = {
+					from,
+					to,
+					subject,
+					html
+				};
+
+				this.transporter.sendMail(mailOptions);
 			}
 		);
 	}
 
-	sendEmail(address, data) {
-		let mailOptions = {
-				from: this.fromA,
-				to: address,
-				subject: this.subject,
-				html: this.template(data)
-			};
-
-		return this.transporter.sendMail(mailOptions);
-	}
-
 }
 
-module.exports = mailer;
+module.exports = Mailer;

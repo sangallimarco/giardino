@@ -13,5 +13,9 @@
         "PORT": 80
     },
     "ALLOWED": ["sangalli.marco@gmail.com"],
-    "TOTP": "cGFzc3dk"
+    "TOTP": "cGFzc3dk",
+     "MAILER": {
+        "DOMAIN": "sandboxxxxxxxx.mailgun.org",
+        "KEY": "key-xxxxxx"
+    }
 }
