@@ -60,16 +60,19 @@ export default class Login extends Component {
             type="email"
             name="email"
             id="email"
+            autoFocus
             size="large"
             placeholder="Email"
             onPressEnter={(evt) => this.handleEmail(evt)}/>);
     }
 
     renderCode() {
+        let autoFocus
         return (<Input
             type="number"
             defaultValue=""
             autoComplete="nope"
+            autoFocus
             id="otp"
             name="otp"
             size="large"
