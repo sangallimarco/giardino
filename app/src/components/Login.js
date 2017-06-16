@@ -40,7 +40,6 @@ export default class Login extends Component {
         LoginService
             .requestToken(email, otp)
             .then(res => {
-                console.log(this.props);
                 const location = {
                     pathname: '/controls',
                     state: {}
@@ -52,7 +51,7 @@ export default class Login extends Component {
                     .push(location);
             })
             .catch(err => {
-                 this.setState(Object.assign(this.state, {error: 'Code Error'}));
+                this.setState(Object.assign(this.state, {error: 'Code Error'}));
             });
     }
 
@@ -88,7 +87,9 @@ export default class Login extends Component {
         let input = insertCode
             ? this.renderCode()
             : this.renderEmail();
-        let alert = error ? this.renderError(error) : '';
+        let alert = error
+            ? this.renderError(error)
+            : '';
 
         return (
             <div className="login">

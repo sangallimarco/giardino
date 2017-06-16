@@ -31,14 +31,12 @@ export default class Controls extends StreamComponent {
         this.actions = {
             '/status': payload => {
                 let {status} = payload;
-                console.log('start', status);
                 this.setState(Object.assign(this.state, {status}));
             },
             '/queue': payload => {
                 let {queued, items} = payload;
                 let percent = ((items - queued) / items) * 100;
                 let icon = 'sync';
-                console.log(percent);
                 this.setState(Object.assign(this.state, {percent, icon}));
             },
             '/end': payload => {
