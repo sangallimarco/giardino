@@ -96,7 +96,6 @@ export default class Login extends Component {
 
         return (
             <div className="login">
-                {insertCode}
                 <div className="login-card">
                     <div className="login-title">Please Login</div>
                     {input}
