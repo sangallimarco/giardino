@@ -34,7 +34,8 @@ export default class Controls extends Component {
 
     render() {
         let {CommandsStore} = this.props;
-        let {status, percent, icon} = CommandsStore;
+        let {status, percent} = CommandsStore;
+        let icon = status ? 'sync' : 'caret-right';
 
         return (
             <div className="controls">

@@ -7,7 +7,7 @@ const secret = config.get('SECRET');
 class AuthService {
 
     getOTP() {
-        return new TOTP(config.get('TOTP'), null, 120);
+        return new TOTP(config.get('TOTP'), null, 300);
     }
 
     requestOTP(email) {

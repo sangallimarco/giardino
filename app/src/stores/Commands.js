@@ -2,7 +2,7 @@ import {action, observable, computed} from "mobx";
 import {SocketService} from '../core';
 
 class CommandsModel {
-    @observable state = false;
+    @observable status = false;
     @observable queued = 0;
     @observable items = 0;
 
@@ -45,12 +45,7 @@ class CommandsModel {
 
     @computed
     get percent() {
-        return ((this.items - this.queued) / this.items) * 100;
-    }
-
-    @computed
-    get icon() {
-        return this.items > 0 ? 'sync' : 'caret-right';
+        return this.items ? ((this.items - this.queued) / this.items) * 100 : 100;
     }
 }
 

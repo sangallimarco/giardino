@@ -107,10 +107,10 @@ export default class Login extends Component {
             : '';
 
         let {UserStore} = this.props;
+        // {UserStore.details.email}
 
         return (
             <div className="login" onClick={() => this.handleTest()}>
-                {UserStore.details.email}
                 <div className="login-card">
                     <div className="login-title">Please Login</div>
                     {input}
