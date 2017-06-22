@@ -2,17 +2,31 @@ import {action, observable, computed} from "mobx";
 import jwtDecode from 'jwt-decode';
 
 class UserModel {
-    @observable token = localStorage.getItem('token');
+    @observable user = {};
+    @observable token = '';
+
+    constructor() {
+        let token = localStorage.getItem('token');
+        this.setToken(token);
+    }
 
     @action
     setToken(token) {
         this.token = token;
-        localStorage.setItem('token', token);
+        let user = this.getPayload(token);
+        this.user = user;
+    }
+
+    getPayload() {
+        return this.token
+            ? jwtDecode(this.token)
+            : {};
     }
 
     @computed
-    get details() {
-        return this.token ? jwtDecode(this.token) : {};
+    get email() {
+        let {email} = this.user;
+        return email;
     }
 }
 

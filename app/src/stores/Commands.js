@@ -6,7 +6,7 @@ class CommandsModel {
     @observable queued = 0;
     @observable items = 0;
 
-    init() {
+    constructor() {
         const actions = {
             '/status': payload => {
                 let {status} = payload;

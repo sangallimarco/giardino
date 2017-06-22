@@ -3,7 +3,7 @@ import Progress from 'antd/lib/progress';
 import Button from 'antd/lib/button';
 import Layout from 'antd/lib/layout';
 import './controls.css';
-import {observer, inject} from 'mobx-react';
+import {observer} from 'mobx-react';
 
 const {
     Header,
@@ -14,8 +14,7 @@ const {
     Col
 } = Layout;
 
-@inject('CommandsStore')
-@observer
+@observer(['CommandsStore', 'UserStore'])
 export default class Controls extends Component {
 
     handlePlay() {
@@ -33,12 +32,16 @@ export default class Controls extends Component {
     }
 
     render() {
-        let {CommandsStore} = this.props;
+        let {CommandsStore, UserStore} = this.props;
         let {status, percent} = CommandsStore;
-        let icon = status ? 'sync' : 'caret-right';
+        let {email} = UserStore;
+        let icon = status
+            ? 'sync'
+            : 'caret-right';
 
         return (
             <div className="controls">
+                <h1>{email}</h1>
                 <div className="controls-container">
                     <Progress className="controls-progress" type="dashboard" percent={percent}/>
                 </div>
