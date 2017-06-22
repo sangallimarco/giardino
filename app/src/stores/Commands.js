@@ -21,7 +21,7 @@ class CommandsModel {
             }
         };
 
-        SocketService.dispatch(actions);
+        SocketService.register(actions);
     }
 
     @action

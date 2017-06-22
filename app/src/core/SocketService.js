@@ -2,6 +2,7 @@ class SocketService {
 
     constructor() {
         this.socket = null;
+        this.actions = [];
     }
 
     init(token) {
@@ -23,7 +24,7 @@ class SocketService {
                 socket.on('authenticated', () => {
                     this.socket = socket;
                     // register all callbacks
-                    this.register();
+                    this.subscribeActions();
                     // return socket
                     resolve(socket);
                 });
@@ -45,11 +46,11 @@ class SocketService {
         }
     }
 
-    subscribe(id, resolve) {
+    subscribe(path, resolve) {
         if (this.socket) {
             this
                 .socket
-                .on(id, (payload) => {
+                .on(path, (payload) => {
                     resolve(payload);
                 });
         }
@@ -58,34 +59,45 @@ class SocketService {
     /**
      * Store all actions
      */
-    dispatch(actions) {
-        this.actions = actions;
+    register(actions = {}) {
+        let mapped = [];
+        let keys = Object.keys(actions);
+        keys.forEach(path => {
+            mapped.push({path, resolve: actions[path]});
+        });
+
+        this.actions = [
+            ...this.actions,
+            ...mapped
+        ];
     }
 
-    register() {
+    /**
+     * Register actions when socket is ready
+     */
+    subscribeActions() {
         // remove previous subscriptions
-        this.destroy(this.actions);
+        this.destroy();
 
         // add subscriptions
-        if (this.socket) {
-            let keys = Object.keys(this.actions);
-
-            keys.forEach(id => {
-                let resolve = this.actions[id];
-                this.subscribe(id, resolve);
+        this
+            .actions
+            .forEach(action => {
+                let {path, resolve} = action;
+                this.subscribe(path, resolve);
             });
-        }
     }
 
-    destroy(actions) {
+    destroy() {
         if (this.socket) {
-            let keys = Object.keys(actions);
-
-            keys.forEach(id => {
-                this
-                    .socket
-                    .off(id, actions[id]);
-            });
+            this
+                .actions
+                .forEach(action => {
+                    let {path, resolve} = action;
+                    this
+                        .socket
+                        .off(path, resolve);
+                });
         }
     }
 }
