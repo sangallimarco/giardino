@@ -4,7 +4,10 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Alert from 'antd/lib/alert';
 import './login.css';
+import {observer, inject} from 'mobx-react';
 
+@inject('stores')
+@observer
 export default class Login extends Component {
 
     constructor(props) {
@@ -40,6 +43,14 @@ export default class Login extends Component {
         LoginService
             .requestToken(email, otp)
             .then(res => {
+
+                // set token in the store
+                this
+                    .props
+                    .stores
+                    .user
+                    .setToken(res);
+
                 const location = {
                     pathname: '/controls',
                     state: {}
@@ -54,6 +65,8 @@ export default class Login extends Component {
                 this.setState(Object.assign(this.state, {error: 'Code Error'}));
             });
     }
+
+    handleTest() {}
 
     renderEmail() {
         return (<Input
@@ -94,8 +107,12 @@ export default class Login extends Component {
             ? this.renderError(error)
             : '';
 
+        let {user} = this.props.stores;
+        let {details} = user;
+
         return (
-            <div className="login">
+            <div className="login" onClick={() => this.handleTest()}>
+                {user.details.email}
                 <div className="login-card">
                     <div className="login-title">Please Login</div>
                     {input}

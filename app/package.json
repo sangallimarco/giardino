@@ -19,18 +19,23 @@
     "d3": "^4.9.1",
     "d3-shape": "^1.2.0",
     "history": "^4.6.2",
+    "jwt-decode": "^2.2.0",
+    "mobx-react-devtools": "^4.2.15",
     "react": "^15.5.4",
+    "react-app-rewire-mobx": "^1.0.3",
     "react-dom": "^15.5.4",
     "react-router": "^4.1.1",
-    "react-rxjs-stream": "0.0.4"
+    "react-rxjs-stream": "0.0.4",
+    "typescript": "^2.5.0-dev.20170621"
   },
   "devDependencies": {
+    "react-app-rewired": "^1.0.5",
     "react-scripts": "1.0.7"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-app-rewired eject"
   }
 }

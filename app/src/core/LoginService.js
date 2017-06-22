@@ -18,7 +18,9 @@ class LoginServiceClass {
             .then(data => {
                 let {token} = data;
                 // connect using the new token
-                return SocketService.init(token);
+                SocketService.init(token);
+
+                return token;
             });
     }
 
