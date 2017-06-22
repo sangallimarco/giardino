@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {StreamManager, StreamComponent} from 'react-rxjs-stream';
-import {SocketService} from '../core';
-import Streams from '../Streams';
 import Progress from 'antd/lib/progress';
 import Button from 'antd/lib/button';
 import Layout from 'antd/lib/layout';
 import './controls.css';
+import {observer, inject} from 'mobx-react';
+
 const {
     Header,
     Footer,
@@ -15,53 +14,27 @@ const {
     Col
 } = Layout;
 
-export default class Controls extends StreamComponent {
+@inject('CommandsStore')
+@observer
+export default class Controls extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            status: false,
-            percent: 100,
-            icon: 'caret-right'
-        };
+    handlePlay() {
+        this
+            .props
+            .CommandsStore
+            .start();
     }
 
-    componentDidMount() {
-
-        this.actions = {
-            '/status': payload => {
-                let {status} = payload;
-                this.setState(Object.assign(this.state, {status}));
-            },
-            '/queue': payload => {
-                let {queued, items} = payload;
-                let percent = ((items - queued) / items) * 100;
-                let icon = 'sync';
-                this.setState(Object.assign(this.state, {percent, icon}));
-            },
-            '/end': payload => {
-                let icon = 'caret-right';
-                this.setState(Object.assign(this.state, {icon}));
-            }
-        };
-
-        SocketService.dispatch(this.actions);
-    }
-
-    componentWillUnmount() {
-        SocketService.destroy(this.actions);
-    }
-
-    handlePlay(evt) {
-        SocketService.emit('/start', {status: true});
-    }
-
-    handleStop(evt) {
-        SocketService.emit('/stop', {status: true});
+    handleStop() {
+        this
+            .props
+            .CommandsStore
+            .stop();
     }
 
     render() {
-        let {status, percent, icon} = this.state;
+        let {CommandsStore} = this.props;
+        let {status, percent, icon} = CommandsStore;
 
         return (
             <div className="controls">
@@ -73,14 +46,14 @@ export default class Controls extends StreamComponent {
                         icon={icon}
                         className="controls-button"
                         type="primary"
-                        onClick={this.handlePlay}></Button>
+                        onClick={(evt) => this.handlePlay()}></Button>
                 </div>
                 <div className="controls-container">
                     <Button
                         icon="close"
                         className="controls-button controls-button-danger"
                         type="danger"
-                        onClick={this.handleStop}></Button>
+                        onClick={(evt) => this.handleStop()}></Button>
                 </div>
             </div>
         );

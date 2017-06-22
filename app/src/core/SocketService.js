@@ -22,6 +22,9 @@ class SocketService {
 
                 socket.on('authenticated', () => {
                     this.socket = socket;
+                    // register all callbacks
+                    this.register();
+                    // return socket
                     resolve(socket);
                 });
 
@@ -52,12 +55,23 @@ class SocketService {
         }
     }
 
+    /**
+     * Store all actions
+     */
     dispatch(actions) {
+        this.actions = actions;
+    }
+
+    register() {
+        // remove previous subscriptions
+        this.destroy(this.actions);
+
+        // add subscriptions
         if (this.socket) {
-            let keys = Object.keys(actions);
+            let keys = Object.keys(this.actions);
 
             keys.forEach(id => {
-                let resolve = actions[id];
+                let resolve = this.actions[id];
                 this.subscribe(id, resolve);
             });
         }

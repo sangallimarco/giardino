@@ -6,7 +6,7 @@ import Alert from 'antd/lib/alert';
 import './login.css';
 import {observer, inject} from 'mobx-react';
 
-@inject('stores')
+@inject('UserStore')
 @observer
 export default class Login extends Component {
 
@@ -47,8 +47,7 @@ export default class Login extends Component {
                 // set token in the store
                 this
                     .props
-                    .stores
-                    .user
+                    .UserStore
                     .setToken(res);
 
                 const location = {
@@ -107,12 +106,11 @@ export default class Login extends Component {
             ? this.renderError(error)
             : '';
 
-        let {user} = this.props.stores;
-        let {details} = user;
+        let {UserStore} = this.props;
 
         return (
             <div className="login" onClick={() => this.handleTest()}>
-                {user.details.email}
+                {UserStore.details.email}
                 <div className="login-card">
                     <div className="login-title">Please Login</div>
                     {input}
