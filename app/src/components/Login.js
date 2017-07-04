@@ -4,9 +4,10 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Alert from 'antd/lib/alert';
 import './login.css';
-import {observer} from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 
-@observer(['UserStore'])
+@inject('UserStore')
+@observer
 export default class Login extends Component {
 
     constructor(props) {

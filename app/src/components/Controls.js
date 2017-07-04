@@ -3,7 +3,7 @@ import Progress from 'antd/lib/progress';
 import Button from 'antd/lib/button';
 import Layout from 'antd/lib/layout';
 import './controls.css';
-import {observer} from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 
 const {
     Header,
@@ -14,7 +14,8 @@ const {
     Col
 } = Layout;
 
-@observer(['CommandsStore', 'UserStore'])
+@inject('CommandsStore', 'UserStore') 
+@observer
 export default class Controls extends Component {
 
     handlePlay() {
