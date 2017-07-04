@@ -14,7 +14,7 @@ class CommandsModel {
             },
             '/queue': payload => {
                 let {queued, items} = payload;
-                this.setQueue(items, queued);  
+                this.setQueue(items, queued);
             },
             '/end': payload => {
                 this.setStatus(false);
@@ -45,7 +45,9 @@ class CommandsModel {
 
     @computed
     get percent() {
-        return this.items ? ((this.items - this.queued) / this.items) * 100 : 100;
+        return this.queued
+            ? ((this.items - this.queued) / this.items) * 100
+            : 100;
     }
 }
 

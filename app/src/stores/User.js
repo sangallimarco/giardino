@@ -13,7 +13,7 @@ class UserModel {
     @action
     setToken(token) {
         this.token = token;
-        localStorage.getItem('token')
+        localStorage.getItem('token');
         let user = this.getPayload(token);
         this.user = user;
     }

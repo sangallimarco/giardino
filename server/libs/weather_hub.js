@@ -3,7 +3,9 @@ const queue = require('./queue');
 
 const develop = process.env.NODE_ENV === 'development';
 
-const gpio = develop ? require('./gpio_mock') : require('./gpio');
+const gpio = develop
+    ? require('./gpio_mock')
+    : require('./gpio');
 const pins = config.get('CORE.PINS');
 const delayOn = config.get('CORE.ON');
 const delayOff = config.get('CORE.OFF');
@@ -12,10 +14,7 @@ const Forecast = require('forecast');
 const forecastKey = config.get('FORECAST.KEY');
 const forecastLatLon = config.get('FORECAST.LATLON');
 const forecast = new Forecast({
-    service: 'darksky',
-    key: forecastKey,
-    units: 'celsius',
-    cache: true, // Cache API requests 
+    service: 'darksky', key: forecastKey, units: 'celsius', cache: true, // Cache API requests
     ttl: {
         minutes: 27,
         seconds: 45
@@ -36,15 +35,18 @@ class WeatherHub {
         };
 
         let q = new queue();
+        q.on('start', (queued, items) => {
+            // set state
+            let pin = null;
+            let state = false;
+            Object.assign(this.state, {pin, state, queued, items});
+            // send updates
+            this.sendState();
+        });
         q.on('change', (pin, state, queued, items) => {
             this.setPin(pin, state);
             // set state
-            Object.assign(this.state, {
-                pin,
-                state,
-                queued,
-                items
-            });
+            Object.assign(this.state, {pin, state, queued, items});
             // send updates
             this.sendUpdates();
         });
@@ -54,14 +56,11 @@ class WeatherHub {
 
             console.log('Ended');
             this.lock = false;
-            SocketRouter.broadcast('/end', {
-                status: false
-            });
+            SocketRouter.broadcast('/end', {status: false});
         });
 
         // destroy queue later
         this.q = q;
-
 
     }
 
@@ -71,13 +70,11 @@ class WeatherHub {
             console.log('Checking Weather...');
 
             if (!force) {
-                this.getWeather()
+                this
+                    .getWeather()
                     .then(weather => {
                         // data returned now check
-                        let {
-                            precipProbability,
-                            temperature
-                        } = weather;
+                        let {precipProbability, temperature} = weather;
 
                         console.log('Weather:', weather);
 
@@ -116,15 +113,23 @@ class WeatherHub {
     restartQueue() {
         console.log('Restarting Queue...');
         this.lock = true;
-        this.q.init(pins, delayOn, delayOff, true);
-        this.q.run();
+        this
+            .q
+            .init(pins, delayOn, delayOff, true);
+        this
+            .q
+            .start();
     }
 
     stop() {
         console.log('Stopping Queue...');
         this.lock = true;
-        this.q.init(pins, delayOn, delayOff, false);
-        this.q.run();
+        this
+            .q
+            .init(pins, delayOn, delayOff, false);
+        this
+            .q
+            .start();
     }
 
     setPin(pin, state) {
@@ -134,13 +139,12 @@ class WeatherHub {
 
     init() {
         // wait for pins
-        gpio.init(pins)
-            .then(
-                () => {
-                    console.log('System configured');
-                    this.lock = false;
-                }
-            );
+        gpio
+            .init(pins)
+            .then(() => {
+                console.log('System configured');
+                this.lock = false;
+            });
     }
 
     // send updates periodically
@@ -157,9 +161,7 @@ class WeatherHub {
 
     sendState() {
         let status = 'change';
-        let payload = Object.assign({}, this.state, {
-            status
-        });
+        let payload = Object.assign({}, this.state, {status});
         console.log(payload);
         SocketRouter.broadcast('/queue', payload);
     }

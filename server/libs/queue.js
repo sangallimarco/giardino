@@ -17,42 +17,44 @@ class Queue extends EventEmitter {
         }
 
         pins.forEach(x => {
-            let items = switcher ? [
-                this.createItem(x, true, delayOn),
-                this.createItem(x, false, delayOff)
-            ] : [
-                this.createItem(x, false, delayOff)
-            ];
-            this.queue.push(...items);
+            let items = switcher
+                ? [
+                    this.createItem(x, true, delayOn),
+                    this.createItem(x, false, delayOff)
+                ]
+                : [this.createItem(x, false, delayOff)];
+            this
+                .queue
+                .push(...items);
         });
 
         this.queueLength = this.queue.length;
     }
 
     createItem(pin, status, delay) {
-        return {
-            pin,
-            status,
-            delay
-        };
+        return {pin, status, delay};
+    }
+
+    start() {
+        let queueLength = this.queueLength;
+        this.emit('start', queueLength, queueLength);
+        this.run();
     }
 
     run() {
         if (this.queue.length) {
-            let item = this.queue.shift();
+            let item = this
+                .queue
+                .shift();
 
             if (item) {
-                let {
-                    pin,
-                    status,
-                    delay
-                } = item;
+                let {pin, status, delay} = item;
                 let queued = this.queue.length;
                 let queueLength = this.queueLength;
 
                 this.emit('change', pin, status, queued, queueLength);
                 this.timer = setTimeout(() => {
-                    this.run(true);
+                    this.run();
                 }, delay);
             }
         } else {
