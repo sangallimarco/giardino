@@ -7,6 +7,9 @@ import {Router, Route} from 'react-router';
 import {Provider} from 'mobx-react';
 import {UserStore, CommandsStore} from './stores';
 import DevTools from 'mobx-react-devtools';
+import {useStrict} from 'mobx';
+
+useStrict(true);
 
 const stores = {
   UserStore,
