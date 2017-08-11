@@ -1,0 +1,21 @@
+{
+    "FORECAST": {
+        "KEY": "xxx",
+        "LATLON": [0, 0]
+    },
+    "CORE": {
+        "PINS": [7, 11, 13, 15, 19],
+        "ON": 300000,
+        "OFF": 3000,
+        "CRON": "40 7 * * *"
+    },
+    "API": {
+        "PORT": 4000
+    },
+    "ALLOWED": ["sangalli.marco@gmail.com"],
+    "TOTP": "cGFzc3dk",
+     "MAILER": {
+        "DOMAIN": "sandboxxxxxxxx.mailgun.org",
+        "KEY": "key-xxxxxx"
+    }
+}
